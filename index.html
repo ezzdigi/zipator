@@ -408,7 +408,7 @@ async function fetchLeaderboard(){
         .filter(p=>p.member!==false)
         .sort((a,b)=>Number(b.coins)-Number(a.coins));
       $('leaderboardCard').innerHTML=ranked.map((p,i)=>
-        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · CP ${Number(p.cp||0).toLocaleString('en-US')}</small></div><b>${Number(p.coins).toLocaleString('en-US')}</b></div>`
+        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · ${Number(p.coins).toLocaleString('en-US')} EZZ</small></div><div style="text-align:left"><b style="color:#ffc184">CP ${Number(p.cp||0).toLocaleString('en-US')}</b></div></div>`
       ).join('');
       $('leaderboardNote').textContent='فقط اعضای کانال @ezzdigii در این جدول نمایش داده می‌شوند';
     }
@@ -442,9 +442,12 @@ async function fetchLeaderboard(){
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));$(b.dataset.panel).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})
- if(b.dataset.panel==='rank') fetchLeaderboard();
+ if(b.dataset.panel==='rank'||b.dataset.panel==='profile'||b.dataset.panel==='home') fetchLeaderboard();
 }));
 setInterval(()=>{if(s.energy<100){s.energy=Math.min(100,s.energy+1);render();save()}},3000);
+/* Keep referral coin rewards (and the visible balance on the Tap page) in
+   sync even if the player never opens the Rank/Profile tabs. */
+setInterval(()=>{ if(!gateVisible()) fetchLeaderboard(); },20000);
 render();
 
 /* Telegram membership gate + shared leaderboard server */

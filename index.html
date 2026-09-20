@@ -242,7 +242,8 @@ button{font-family:inherit}
   <div class="card mission" style="margin-top:12px"><div class="micon">🔗</div><div class="grow"><b>دعوت دوستان</b><small>به ازای هر دوست، ۵۰۰ EZZ جایزه بگیر</small></div><button class="claim" onclick="invite()">اشتراک</button></div>
   <div class="card" style="margin-top:12px;padding:6px 16px">
     <div class="title" style="margin:10px 3px 2px"><h2 style="font-size:13px;color:var(--muted)">👥 زیرمجموعه‌گیری</h2></div>
-    <div class="row" style="padding:11px 0"><span style="color:var(--muted)">تعداد دعوت‌شده‌ها</span><b id="pfReferrals">0</b></div>
+    <div class="row" style="padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">تعداد دعوت‌شده‌ها</span><b id="pfReferrals">0</b></div>
+    <div class="row" style="padding:11px 0"><span style="color:var(--muted)">جایزه دعوت دریافتی</span><b id="pfReferralCoins" style="color:#ffc184">0 EZZ</b></div>
   </div>
 </main>
 </div>
@@ -321,6 +322,7 @@ function render(){
  $('rkName').textContent=s.gameName||'Ezz Gamer'; $('rkLevel').textContent='Level '+s.level+' · CP '+s.cp.toLocaleString('en-US'); $('rkScore').textContent=totalPoints().toLocaleString('en-US');
  $('cpAmount').textContent=s.cp.toLocaleString('en-US'); $('cpTop').textContent=s.cp.toLocaleString('en-US'); $('rkYouCP').textContent=s.cp.toLocaleString('en-US');
  $('cpProgress').textContent=s.coins.toLocaleString('en-US')+' / '+CP_POINTS_PER_CP.toLocaleString('en-US')+' امتیاز';
+ if($('pfReferralCoins')) $('pfReferralCoins').textContent=(s.referralCoinsGranted||0).toLocaleString('en-US')+' EZZ';
 }
 function showToast(t){const x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),1700)}
 $('tap').addEventListener('pointerdown',e=>{
@@ -407,8 +409,13 @@ async function fetchLeaderboard(){
       const ranked=data.top
         .filter(p=>p.member!==false)
         .sort((a,b)=>Number(b.coins)-Number(a.coins));
+      /* The backend's own `cp` field is unreliable (often comes back 0 for
+         everyone). CP is defined as "how many times the 15,000-point bar
+         was filled", so it can always be derived exactly from the synced
+         total-points value — use that instead of trusting p.cp blindly. */
+      const cpOf=p=>Math.max(Number(p.cp)||0, Math.floor(Number(p.coins||0)/CP_POINTS_PER_CP));
       $('leaderboardCard').innerHTML=ranked.map((p,i)=>
-        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · ${Number(p.coins).toLocaleString('en-US')} EZZ</small></div><div style="text-align:left"><b style="color:#ffc184">CP ${Number(p.cp||0).toLocaleString('en-US')}</b></div></div>`
+        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · ${Number(p.coins).toLocaleString('en-US')} EZZ</small></div><div style="text-align:left"><b style="color:#ffc184">CP ${cpOf(p).toLocaleString('en-US')}</b></div></div>`
       ).join('');
       $('leaderboardNote').textContent='فقط اعضای کانال @ezzdigii در این جدول نمایش داده می‌شوند';
     }

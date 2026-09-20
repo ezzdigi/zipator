@@ -314,7 +314,7 @@ function render(){
  $('streak').textContent=s.streak; $('energybar').style.width=s.energy+'%';
  let xp=s.xp%1000; $('xp').textContent=xp+' / 1000'; $('xpbar').style.width=(xp/10)+'%';
  $('myScore').textContent=totalPoints().toLocaleString('en-US');
- $('rkName').textContent=s.gameName||'Ezz Gamer'; $('rkLevel').textContent='Level '+s.level+' · '+totalPoints().toLocaleString('en-US')+' EZZ'; $('rkScore').textContent=s.cp.toLocaleString('en-US')+' CP';
+ $('rkName').textContent=s.gameName||'Ezz Gamer'; $('rkLevel').textContent='Level '+s.level+' · CP '+s.cp.toLocaleString('en-US'); $('rkScore').textContent=totalPoints().toLocaleString('en-US');
  $('cpAmount').textContent=s.cp.toLocaleString('en-US'); $('cpTop').textContent=s.cp.toLocaleString('en-US'); $('rkYouCP').textContent=s.cp.toLocaleString('en-US');
  $('cpProgress').textContent=s.coins.toLocaleString('en-US')+' / '+CP_POINTS_PER_CP.toLocaleString('en-US')+' امتیاز';
 }
@@ -404,7 +404,7 @@ async function fetchLeaderboard(){
         .filter(p=>p.member!==false)
         .sort((a,b)=>Number(b.coins)-Number(a.coins));
       $('leaderboardCard').innerHTML=ranked.map((p,i)=>
-        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · ${Number(p.coins).toLocaleString('en-US')} EZZ</small></div><b>${Number(p.cp||0).toLocaleString('en-US')} CP</b></div>`
+        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · CP ${Number(p.cp||0).toLocaleString('en-US')}</small></div><b>${Number(p.coins).toLocaleString('en-US')}</b></div>`
       ).join('');
       $('leaderboardNote').textContent='فقط اعضای کانال @ezzdigii در این جدول نمایش داده می‌شوند';
     }

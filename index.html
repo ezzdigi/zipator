@@ -292,7 +292,6 @@ s.lastEnergyTs=Date.now();
 if(!s.missions) s.missions={};
 if(!s.taps) s.taps=0;
 if(!s.cp) s.cp=0;
-if(!s.referralCpGranted) s.referralCpGranted=0;
 if(!s.referralCoinsGranted) s.referralCoinsGranted=0;
 if(!s.cycles) s.cycles=0;  /* how many times the 15,000 bar was filled (used for level + ranking) */
 const CP_POINTS_PER_CP=15000;  /* every 15,000 EZZ points earned = 1 CP; the bar fills 1 per point */
@@ -304,9 +303,7 @@ function cpRollover(){
   if(g>0) showToast('🪙 +'+g+' CP دریافت شد!');
 }
 function totalPoints(){return s.cycles*CP_POINTS_PER_CP+s.coins}
-const REFERRALS_PER_BONUS=20;  /* every 20 referrals = 50 CP */
-const REFERRAL_BONUS_CP=50;
-const REFERRAL_COIN_REWARD=500;  /* instant EZZ coin reward per successful referral */
+const REFERRAL_COIN_REWARD=500;  /* instant EZZ coin reward per successful referral (no CP reward) */
 function save(){s.lastEnergyTs=Date.now();localStorage.setItem(KEY,JSON.stringify(s));render();syncScore()}
 function render(){
  $('coins').textContent=s.coins.toLocaleString('en-US'); $('energy').textContent=Math.floor(s.energy);
@@ -428,15 +425,6 @@ async function fetchLeaderboard(){
           s.coins+=gainedCoins;
           cpRollover();
           showToast('🎁 +'+gainedCoins+' EZZ بابت دعوت دوستان!');
-          referralRewardGranted=true;
-        }
-        /* Every 20 referrals earns 50 CP, credited once per threshold reached. */
-        const earnedFromReferrals=Math.floor(data.you.referralCount/REFERRALS_PER_BONUS)*REFERRAL_BONUS_CP;
-        if(earnedFromReferrals>s.referralCpGranted){
-          const gained=earnedFromReferrals-s.referralCpGranted;
-          s.referralCpGranted=earnedFromReferrals;
-          s.cp+=gained;
-          showToast('🎁 +'+gained+' CP بابت زیرمجموعه‌گیری!');
           referralRewardGranted=true;
         }
         if(referralRewardGranted) save();

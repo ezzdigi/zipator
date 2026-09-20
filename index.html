@@ -395,7 +395,7 @@ function syncScore(force=false){
    from the server. Falls back to the local-only view already in the HTML
    when the server isn't configured/reachable. */
 async function fetchLeaderboard(){
-  if(!API_BASE) return;
+  if(!API_BASE) return false;
   const tg=window.Telegram&&Telegram.WebApp;
   try{
     const q=(tg&&tg.initData)?('?initData='+encodeURIComponent(tg.initData)):'';
@@ -444,7 +444,8 @@ async function fetchLeaderboard(){
         if(referralRewardGranted) save();
       }
     }
-  }catch(e){ /* keep the local-only fallback already shown */ }
+    return true;
+  }catch(e){ return false; /* keep the local-only fallback already shown */ }
 }
 /* Manual "claim" button next to "جایزه دعوت دریافتی": lets the player force
    an immediate check with the server instead of waiting for the periodic
@@ -453,10 +454,13 @@ async function fetchLeaderboard(){
 async function claimReferralRewards(btn){
   const before=s.referralCoinsGranted||0;
   if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent='...'}
-  await fetchLeaderboard();
+  const ok=await fetchLeaderboard();
   if(btn){btn.disabled=false;btn.textContent=btn.dataset.label||'دریافت'}
+  if(!ok){ showToast('⚠️ اتصال به سرور برقرار نشد، دوباره تلاش کنید'); return }
+  /* Whatever the server now reports as earned-from-referrals gets added to
+     the main balance in one shot — not just the latest single referral. */
   const gained=(s.referralCoinsGranted||0)-before;
-  if(gained>0) showToast('🎁 +'+gained+' EZZ به موجودی اضافه شد');
+  if(gained>0) showToast('🎁 +'+gained.toLocaleString('en-US')+' EZZ به موجودی اضافه شد');
   else showToast('جایزه جدیدی برای دریافت وجود ندارد');
 }
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{

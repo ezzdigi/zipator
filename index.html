@@ -243,7 +243,7 @@ button{font-family:inherit}
   <div class="card" style="margin-top:12px;padding:6px 16px">
     <div class="title" style="margin:10px 3px 2px"><h2 style="font-size:13px;color:var(--muted)">👥 زیرمجموعه‌گیری</h2></div>
     <div class="row" style="padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">تعداد دعوت‌شده‌ها</span><b id="pfReferrals">0</b></div>
-    <div class="row" style="padding:11px 0"><span style="color:var(--muted)">جایزه دعوت دریافتی</span><b id="pfReferralCoins" style="color:#ffc184">0 EZZ</b></div>
+    <div class="row" style="padding:11px 0"><span style="color:var(--muted)">جایزه دعوت دریافتی</span><span style="display:flex;align-items:center;gap:8px"><b id="pfReferralCoins" style="color:#ffc184">0 EZZ</b><button class="claim" id="claimReferralBtn" onclick="claimReferralRewards(this)">دریافت</button></span></div>
   </div>
 </main>
 </div>
@@ -445,6 +445,19 @@ async function fetchLeaderboard(){
       }
     }
   }catch(e){ /* keep the local-only fallback already shown */ }
+}
+/* Manual "claim" button next to "جایزه دعوت دریافتی": lets the player force
+   an immediate check with the server instead of waiting for the periodic
+   background sync, and adds any newly-earned referral coins straight into
+   the main balance shown at the top of the Tap page. */
+async function claimReferralRewards(btn){
+  const before=s.referralCoinsGranted||0;
+  if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent='...'}
+  await fetchLeaderboard();
+  if(btn){btn.disabled=false;btn.textContent=btn.dataset.label||'دریافت'}
+  const gained=(s.referralCoinsGranted||0)-before;
+  if(gained>0) showToast('🎁 +'+gained+' EZZ به موجودی اضافه شد');
+  else showToast('جایزه جدیدی برای دریافت وجود ندارد');
 }
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');

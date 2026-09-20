@@ -173,6 +173,7 @@ button{font-family:inherit}
   <div class="card rankbox" style="margin-bottom:12px">
     <div class="row"><span>رتبه شما</span><b id="rkYouRank">—</b></div>
     <div class="row" style="margin-top:6px"><span id="rkYouName">Ezz Gamer</span><b id="rkYouScore">0 EZZ</b></div>
+    <div class="row" style="margin-top:6px"><span>CP جمع‌آوری شده</span><b id="rkYouCP">0</b></div>
   </div>
   <div class="card" id="leaderboardCard" style="max-height:60vh;overflow-y:auto">
     <div class="leader"><div class="rank">🎮</div><div class="avatar">👤</div><div class="grow"><b id="rkName">Ezz Gamer</b><small id="rkLevel">Level 1</small></div><b id="rkScore">0</b></div>
@@ -312,7 +313,7 @@ function render(){
  let xp=s.xp%1000; $('xp').textContent=xp+' / 1000'; $('xpbar').style.width=(xp/10)+'%';
  $('myScore').textContent=totalPoints().toLocaleString('en-US');
  $('rkName').textContent=s.gameName||'Ezz Gamer'; $('rkLevel').textContent='Level '+s.level; $('rkScore').textContent=totalPoints().toLocaleString('en-US');
- $('cpAmount').textContent=s.cp.toLocaleString('en-US'); $('cpTop').textContent=s.cp.toLocaleString('en-US');
+ $('cpAmount').textContent=s.cp.toLocaleString('en-US'); $('cpTop').textContent=s.cp.toLocaleString('en-US'); $('rkYouCP').textContent=s.cp.toLocaleString('en-US');
  $('cpProgress').textContent=s.coins.toLocaleString('en-US')+' / '+CP_POINTS_PER_CP.toLocaleString('en-US')+' امتیاز';
 }
 function showToast(t){const x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),1700)}

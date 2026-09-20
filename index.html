@@ -292,6 +292,13 @@ s.lastEnergyTs=Date.now();
 if(!s.missions) s.missions={};
 if(!s.taps) s.taps=0;
 if(!s.cp) s.cp=0;
+/* One-time cleanup: the old "every 20 referrals = 50 CP" bonus is removed.
+   Strip out any CP a player already received from that bonus, permanently. */
+if(s.referralCpGranted){
+  s.cp=Math.max(0,s.cp-s.referralCpGranted);
+  s.referralCpGranted=0;
+  localStorage.setItem(KEY,JSON.stringify(s));  /* persist the cleanup immediately */
+}
 if(!s.referralCoinsGranted) s.referralCoinsGranted=0;
 if(!s.cycles) s.cycles=0;  /* how many times the 15,000 bar was filled (used for level + ranking) */
 const CP_POINTS_PER_CP=15000;  /* every 15,000 EZZ points earned = 1 CP; the bar fills 1 per point */

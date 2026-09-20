@@ -415,7 +415,7 @@ async function fetchLeaderboard(){
          total-points value — use that instead of trusting p.cp blindly. */
       const cpOf=p=>Math.max(Number(p.cp)||0, Math.floor(Number(p.coins||0)/CP_POINTS_PER_CP));
       $('leaderboardCard').innerHTML=ranked.map((p,i)=>
-        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level} · ${Number(p.coins).toLocaleString('en-US')} EZZ</small></div><div style="text-align:left"><b style="color:#ffc184">CP ${cpOf(p).toLocaleString('en-US')}</b></div></div>`
+        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level}</small></div><div style="text-align:left"><b style="font-size:17px">${Number(p.coins).toLocaleString('en-US')} EZZ</b><br><small style="color:#ffc184">CP ${cpOf(p).toLocaleString('en-US')}</small></div></div>`
       ).join('');
       $('leaderboardNote').textContent='فقط اعضای کانال @ezzdigii در این جدول نمایش داده می‌شوند';
     }

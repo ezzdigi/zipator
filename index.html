@@ -402,7 +402,7 @@ async function fetchLeaderboard(){
         .filter(p=>p.member!==false)
         .sort((a,b)=>Number(b.coins)-Number(a.coins));
       $('leaderboardCard').innerHTML=ranked.map((p,i)=>
-        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level}</small></div><b>${Number(p.coins).toLocaleString('en-US')}</b></div>`
+        `<div class="leader"><div class="rank">${i+1}</div><div class="avatar">${i===0?'👑':i===1?'🥈':i===2?'🥉':'🎮'}</div><div class="grow"><b>${escapeHtml(p.name)}</b><small>${p.username?'@'+escapeHtml(p.username)+' · ':''}Level ${p.level}</small></div><b>CP ${Math.floor(Number(p.coins)/CP_POINTS_PER_CP).toLocaleString('en-US')}</b></div>`
       ).join('');
       $('leaderboardNote').textContent='فقط اعضای کانال @ezzdigii در این جدول نمایش داده می‌شوند';
     }

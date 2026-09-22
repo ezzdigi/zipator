@@ -189,8 +189,24 @@ button{font-family:inherit}
     <div class="grow"><b>CP شما</b><small id="cpProgress">0 / 15,000 امتیاز</small></div>
     <b id="cpAmount" style="color:#ffc184;font-size:18px">0</b>
   </div>
+  <div class="card" style="padding:16px;margin-bottom:12px;text-align:center;background:linear-gradient(145deg,#10233be8,#081321e8)">
+    <div style="font-size:28px">🎡</div>
+    <h3 style="margin:5px 0 3px">اسپین CP</h3>
+    <small style="color:var(--muted)">شانس برد CP بین ۷٪ تا ۲۰٪</small>
+    <div style="display:flex;justify-content:center;gap:8px;margin:12px 0;flex-wrap:wrap">
+      <span class="stat" style="padding:8px 14px">🪙 3 CP</span>
+      <span class="stat" style="padding:8px 14px">🪙 5 CP</span>
+      <span class="stat" style="padding:8px 14px">🪙 6 CP</span>
+    </div>
+    <button class="claim" id="spinBtn" onclick="spinCP()" style="width:100%;font-size:15px;padding:12px">🎡 چرخاندن اسپین</button>
+    <small id="spinStatus" style="display:block;margin-top:9px;color:var(--muted)">هر ۶ ساعت یک اسپین</small>
+  </div>
+  <div class="card" style="padding:15px;margin-bottom:12px">
+    <div class="row"><span>🏆 ایونت Ezzgame</span><b style="color:#ffc184">نفر اول: 2,000 EZZ</b></div>
+    <small style="display:block;margin-top:7px;color:var(--muted)">رقابت ایونت بر اساس امتیاز ثبت‌شده در رتبه‌بندی انجام می‌شود.</small>
+  </div>
   <div class="missions">
-    <div class="card mission"><div class="micon">🥇</div><div class="grow"><b>نفر اول</b><small>بالاترین امتیاز این ماه</small></div><b style="color:#ffc184">۲۵۰,۰۰۰ تومان</b></div>
+    <div class="card mission"><div class="micon">🥇</div><div class="grow"><b>نفر اول ایونت</b><small>بالاترین امتیاز ایونت</small></div><b style="color:#ffc184">2,000 EZZ</b></div>
     <div class="card mission"><div class="micon">🥈</div><div class="grow"><b>نفر دوم</b><small>دومین امتیاز برتر این ماه</small></div><b style="color:#ffc184">۱۵۰,۰۰۰ تومان</b></div>
     <div class="card mission"><div class="micon">🎫</div><div class="grow"><b>جایزه ویژه</b><small>بتل پس فصلی</small></div><b style="color:#ffc184">Battle Pass</b></div>
   </div>
@@ -302,6 +318,7 @@ if(s.referralCpGranted){
   localStorage.setItem(KEY,JSON.stringify(s));  /* persist the cleanup immediately */
 }
 if(!s.referralCoinsGranted) s.referralCoinsGranted=0;
+if(typeof s.lastSpinTs!=='number') s.lastSpinTs=0;
 if(!s.cycles) s.cycles=0;  /* how many times the 15,000 bar was filled (used for level + ranking) */
 const CP_POINTS_PER_CP=15000;  /* every 15,000 EZZ points earned = 1 CP; the bar fills 1 per point */
 /* The balance IS the CP bar: it fills 1 per point earned. When it reaches 15,000 the player
@@ -313,6 +330,32 @@ function cpRollover(){
 }
 function totalPoints(){return s.cycles*CP_POINTS_PER_CP+s.coins}
 const REFERRAL_COIN_REWARD=500;  /* instant EZZ coin reward per successful referral (no CP reward) */
+const SPIN_COOLDOWN_MS=6*60*60*1000;
+const SPIN_CP_PRIZES=[3,5,6];
+function updateSpinUI(){
+  const btn=$('spinBtn'), st=$('spinStatus'); if(!btn||!st) return;
+  const left=Math.max(0,SPIN_COOLDOWN_MS-(Date.now()-(s.lastSpinTs||0)));
+  if(left<=0){btn.disabled=false;btn.style.opacity='';st.textContent='آماده است — شانس برد CP بین ۷٪ تا ۲۰٪';return}
+  btn.disabled=true;btn.style.opacity='.55';
+  const h=Math.floor(left/3600000), m=Math.floor((left%3600000)/60000);
+  st.textContent='اسپین بعدی: '+h+' ساعت و '+m+' دقیقه';
+}
+function spinCP(){
+  if(isMember===false){showToast('⚠️ ابتدا عضو کانال @ezzdigii شوید');return}
+  const now=Date.now();
+  if(now-(s.lastSpinTs||0)<SPIN_COOLDOWN_MS){showToast('⏳ اسپین هنوز آماده نیست');updateSpinUI();return}
+  s.lastSpinTs=now;
+  const chance=7+Math.floor(Math.random()*14); // 7% تا 20% شامل هر دو مرز
+  const won=Math.random()*100<chance;
+  if(won){
+    const cp=SPIN_CP_PRIZES[Math.floor(Math.random()*SPIN_CP_PRIZES.length)];
+    s.cp=(s.cp||0)+cp;
+    showToast('🎉 برنده شدی! +'+cp+' CP');
+  }else{
+    showToast('😅 این بار CP برنده نشد؛ دوباره بعداً امتحان کن');
+  }
+  save();updateSpinUI();
+}
 function save(){s.lastEnergyTs=Date.now();localStorage.setItem(KEY,JSON.stringify(s));render();syncScore()}
 function render(){
  $('coins').textContent=s.coins.toLocaleString('en-US'); $('energy').textContent=Math.floor(s.energy);
@@ -324,6 +367,7 @@ function render(){
  $('cpAmount').textContent=s.cp.toLocaleString('en-US'); $('cpTop').textContent=s.cp.toLocaleString('en-US'); $('rkYouCP').textContent=s.cp.toLocaleString('en-US');
  $('cpProgress').textContent=s.coins.toLocaleString('en-US')+' / '+CP_POINTS_PER_CP.toLocaleString('en-US')+' امتیاز';
  if($('pfReferralCoins')) $('pfReferralCoins').textContent=(s.referralCoinsGranted||0).toLocaleString('en-US')+' EZZ';
+ updateSpinUI();
 }
 function showToast(t){const x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),1700)}
 $('tap').addEventListener('pointerdown',e=>{

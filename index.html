@@ -84,6 +84,18 @@ button{font-family:inherit}
 }
 .tg-check:disabled{opacity:.65;cursor:wait;transform:none}
 
+
+.spin-main{position:relative;overflow:hidden;border-radius:16px;transform:translateZ(0);box-shadow:0 8px 25px rgba(0,0,0,.25);transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;}
+.spin-main::before{content:"";position:absolute;inset:-80%;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.55) 50%,transparent 58%);transform:translateX(-35%) rotate(8deg);animation:spinShine 2.6s linear infinite;pointer-events:none;}
+.spin-main span,.spin-main b{position:relative;z-index:1;}
+.spin-main b{display:inline-block;margin-right:5px;animation:spinSpark 1.1s ease-in-out infinite;}
+.spin-main:not(:disabled):hover{transform:translateY(-2px) scale(1.015);filter:brightness(1.08);box-shadow:0 12px 30px rgba(0,0,0,.35);}
+.spin-main:not(:disabled):active{transform:scale(.97);}
+.spin-main:disabled{filter:grayscale(.25);box-shadow:none;}
+@keyframes spinShine{0%{transform:translateX(-55%) rotate(8deg)}100%{transform:translateX(55%) rotate(8deg)}}
+@keyframes spinSpark{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.25) rotate(12deg)}}
+.spin-win{animation:spinWin .65s ease;}
+@keyframes spinWin{0%{transform:scale(1)}35%{transform:scale(1.06) rotate(-1deg)}70%{transform:scale(.98) rotate(1deg)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -192,21 +204,26 @@ button{font-family:inherit}
   <div class="card" style="padding:16px;margin-bottom:12px;text-align:center;background:linear-gradient(145deg,#10233be8,#081321e8)">
     <div style="font-size:28px">🎡</div>
     <h3 style="margin:5px 0 3px">اسپین CP</h3>
-    <small style="color:var(--muted)">شانس برد CP بین ۷٪ تا ۲۰٪</small>
-    <div style="display:flex;justify-content:center;gap:8px;margin:12px 0;flex-wrap:wrap">
+    <small style="color:var(--muted)">با برد اسپین، یکی از جایزه‌های زیر به موجودی شما اضافه می‌شود</small>
+    <div style="display:flex;justify-content:center;gap:8px;margin:12px 0 6px;flex-wrap:wrap">
       <span class="stat" style="padding:8px 14px">🪙 3 CP</span>
       <span class="stat" style="padding:8px 14px">🪙 5 CP</span>
       <span class="stat" style="padding:8px 14px">🪙 6 CP</span>
     </div>
-    <button class="claim" id="spinBtn" onclick="spinCP()" style="width:100%;font-size:15px;padding:12px">🎡 چرخاندن اسپین</button>
+    <div style="display:flex;justify-content:center;gap:8px;margin:0 0 12px;flex-wrap:wrap">
+      <span class="stat" style="padding:8px 14px">💰 ۱,۵۰۰ EZZ</span>
+      <span class="stat" style="padding:8px 14px">💰 ۲,۰۰۰ EZZ</span>
+      <span class="stat" style="padding:8px 14px">💰 ۳,۰۰۰ EZZ</span>
+    </div>
+    <button class="claim spin-main" id="spinBtn" onclick="spinCP()" style="width:100%;font-size:16px;padding:15px 12px;font-weight:900;letter-spacing:.2px">🎡 <span>چرخاندن اسپین</span> <b>✦</b></button>
     <small id="spinStatus" style="display:block;margin-top:9px;color:var(--muted)">هر ۶ ساعت یک اسپین</small>
   </div>
   <div class="card" style="padding:15px;margin-bottom:12px">
-    <div class="row"><span>🏆 ایونت Ezzgame</span><b style="color:#ffc184">نفر اول: 2,000 EZZ</b></div>
+    <div class="row"><span>🏆 ایونت Ezzgame</span><b style="color:#ffc184">نفر اول: ۲۵۰,۰۰۰ تومان</b></div>
     <small style="display:block;margin-top:7px;color:var(--muted)">رقابت ایونت بر اساس امتیاز ثبت‌شده در رتبه‌بندی انجام می‌شود.</small>
   </div>
   <div class="missions">
-    <div class="card mission"><div class="micon">🥇</div><div class="grow"><b>نفر اول ایونت</b><small>بالاترین امتیاز ایونت</small></div><b style="color:#ffc184">2,000 EZZ</b></div>
+    <div class="card mission"><div class="micon">🥇</div><div class="grow"><b>نفر اول ایونت</b><small>بالاترین امتیاز ایونت</small></div><b style="color:#ffc184">۲۵۰,۰۰۰ تومان</b></div>
     <div class="card mission"><div class="micon">🥈</div><div class="grow"><b>نفر دوم</b><small>دومین امتیاز برتر این ماه</small></div><b style="color:#ffc184">۱۵۰,۰۰۰ تومان</b></div>
     <div class="card mission"><div class="micon">🎫</div><div class="grow"><b>جایزه ویژه</b><small>بتل پس فصلی</small></div><b style="color:#ffc184">Battle Pass</b></div>
   </div>
@@ -331,11 +348,18 @@ function cpRollover(){
 function totalPoints(){return s.cycles*CP_POINTS_PER_CP+s.coins}
 const REFERRAL_COIN_REWARD=500;  /* instant EZZ coin reward per successful referral (no CP reward) */
 const SPIN_COOLDOWN_MS=6*60*60*1000;
-const SPIN_CP_PRIZES=[3,5,6];
+const SPIN_PRIZES=[
+  {type:'cp',amount:3,label:'3 CP'},
+  {type:'cp',amount:5,label:'5 CP'},
+  {type:'cp',amount:6,label:'6 CP'},
+  {type:'ezz',amount:1500,label:'1,500 EZZ'},
+  {type:'ezz',amount:2000,label:'2,000 EZZ'},
+  {type:'ezz',amount:3000,label:'3,000 EZZ'}
+];
 function updateSpinUI(){
   const btn=$('spinBtn'), st=$('spinStatus'); if(!btn||!st) return;
   const left=Math.max(0,SPIN_COOLDOWN_MS-(Date.now()-(s.lastSpinTs||0)));
-  if(left<=0){btn.disabled=false;btn.style.opacity='';st.textContent='آماده است — شانس برد CP بین ۷٪ تا ۲۰٪';return}
+  if(left<=0){btn.disabled=false;btn.style.opacity='';st.textContent='آماده است — یکی از جوایز بالا را دریافت کن';return}
   btn.disabled=true;btn.style.opacity='.55';
   const h=Math.floor(left/3600000), m=Math.floor((left%3600000)/60000);
   st.textContent='اسپین بعدی: '+h+' ساعت و '+m+' دقیقه';
@@ -345,14 +369,17 @@ function spinCP(){
   const now=Date.now();
   if(now-(s.lastSpinTs||0)<SPIN_COOLDOWN_MS){showToast('⏳ اسپین هنوز آماده نیست');updateSpinUI();return}
   s.lastSpinTs=now;
-  const chance=7+Math.floor(Math.random()*14); // 7% تا 20% شامل هر دو مرز
-  const won=Math.random()*100<chance;
-  if(won){
-    const cp=SPIN_CP_PRIZES[Math.floor(Math.random()*SPIN_CP_PRIZES.length)];
-    s.cp=(s.cp||0)+cp;
-    showToast('🎉 برنده شدی! +'+cp+' CP');
+
+  const prize=SPIN_PRIZES[Math.floor(Math.random()*SPIN_PRIZES.length)];
+  if(prize.type==='cp'){
+    s.cp=(s.cp||0)+prize.amount;
+    showToast('🎉 برنده شدی! +'+prize.label);
+    const spinBtn=$('spinBtn'); if(spinBtn){spinBtn.classList.remove('spin-win');void spinBtn.offsetWidth;spinBtn.classList.add('spin-win');}
   }else{
-    showToast('😅 این بار CP برنده نشد؛ دوباره بعداً امتحان کن');
+    s.coins+=prize.amount;
+    s.xp+=prize.amount;
+    cpRollover();
+    showToast('🎉 برنده شدی! +'+prize.label);
   }
   save();updateSpinUI();
 }

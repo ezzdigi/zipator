@@ -130,9 +130,9 @@ button{font-family:inherit}
 </div>
 <header>
   <div class="brand"><div class="logo">EZ</div><div><b>EzzDigi Gaming</b><span>Gaming Mini App</span></div></div>
-  <div style="display:flex;align-items:center;gap:6px">
-    <a href="https://ezzdigi.com" target="_blank" rel="noopener" aria-label="وب‌سایت EzzDigi" style="text-decoration:none">🌐</a>
-    <a href="https://instagram.com/ezzdigi" target="_blank" rel="noopener" aria-label="Instagram EzzDigi" style="text-decoration:none">📸</a>
+  <div style="display:flex;align-items:center;gap:7px">
+    <a href="https://ezzdigi.com" target="_blank" rel="noopener" aria-label="وب‌سایت EzzDigi" style="text-decoration:none;display:flex;align-items:center;gap:5px;padding:7px 9px;border:1px solid #ffffff18;border-radius:10px;background:#0d1d31;color:#fff;font-size:11px;font-weight:900;white-space:nowrap">🌐 <span>سایت EzzDigi</span></a>
+    <a href="https://instagram.com/ezzdigi" target="_blank" rel="noopener" aria-label="Instagram EzzDigi" style="text-decoration:none;display:flex;align-items:center;gap:5px;padding:7px 9px;border:1px solid #ffffff18;border-radius:10px;background:#0d1d31;color:#fff;font-size:11px;font-weight:900;white-space:nowrap">📸 <span>اینستاگرام EzzDigi</span></a>
     <button class="iconbtn" onclick="showToast('پروفایل آماده است 🎮')">⚙️</button>
   </div>
 </header>
@@ -217,7 +217,7 @@ button{font-family:inherit}
     <div style="display:flex;justify-content:center;gap:8px;margin:0 0 12px;flex-wrap:wrap">
       <span class="stat" style="padding:8px 14px">⚡ انرژی کامل</span>
       <span class="stat" style="padding:8px 14px">⭐ ۲۰ XP</span>
-      <span class="stat" style="padding:8px 14px">💰 ۱,۵۰۰ / ۲,۰۰۰ / ۳,۰۰۰ EZZ</span>
+      <span class="stat" style="padding:8px 14px">💰 EZZ 1500</span><span class="stat" style="padding:8px 14px">💰 EZZ 2000</span><span class="stat" style="padding:8px 14px">💰 EZZ 3000</span>
     </div>
     <button class="claim spin-main" id="spinBtn" onclick="spinCP()" style="width:100%;font-size:16px;padding:15px 12px;font-weight:900;letter-spacing:.2px">🎡 <span>چرخاندن اسپین</span> <b>✦</b></button>
     <small id="spinStatus" style="display:block;margin-top:9px;color:var(--muted)">هر ۲۴ ساعت یک اسپین</small>
@@ -357,9 +357,9 @@ const SPIN_PRIZES=[
   {type:'cp',amount:4,label:'4 CP',weight:0.01},
   {type:'energy',amount:100,label:'انرژی کامل',weight:30},
   {type:'xp',amount:20,label:'+20 XP',weight:10},
-  {type:'ezz',amount:1500,label:'1,500 EZZ',weight:19.2411936937},
-  {type:'ezz',amount:2000,label:'2,000 EZZ',weight:19.2411936937},
-  {type:'ezz',amount:3000,label:'3,000 EZZ',weight:20.7076126126}
+  {type:'ezz',amount:1500,label:'EZZ 1500',weight:19.2411936937},
+  {type:'ezz',amount:2000,label:'EZZ 2000',weight:19.2411936937},
+  {type:'ezz',amount:3000,label:'EZZ 3000',weight:20.7076126126}
 ];
 function updateSpinUI(){
   const btn=$('spinBtn'), st=$('spinStatus'); if(!btn||!st) return;

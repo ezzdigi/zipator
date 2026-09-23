@@ -347,14 +347,15 @@ function cpRollover(){
 }
 function totalPoints(){return s.cycles*CP_POINTS_PER_CP+s.coins}
 const REFERRAL_COIN_REWARD=500;  /* instant EZZ coin reward per successful referral (no CP reward) */
-const SPIN_COOLDOWN_MS=6*60*60*1000;
+const SPIN_COOLDOWN_MS=24*60*60*1000;
 const SPIN_PRIZES=[
-  {type:'cp',amount:3,label:'3 CP'},
-  {type:'cp',amount:5,label:'5 CP'},
-  {type:'cp',amount:6,label:'6 CP'},
-  {type:'ezz',amount:1500,label:'1,500 EZZ'},
-  {type:'ezz',amount:2000,label:'2,000 EZZ'},
-  {type:'ezz',amount:3000,label:'3,000 EZZ'}
+  {type:'cp',amount:3,label:'3 CP',weight:0.05},
+  {type:'cp',amount:5,label:'5 CP',weight:0.75},
+  {type:'cp',amount:6,label:'6 CP',weight:1.5},
+  {type:'xp',amount:20,label:'+20 XP',weight:20},
+  {type:'ezz',amount:1500,label:'1,500 EZZ',weight:25.2583333333},
+  {type:'ezz',amount:2000,label:'2,000 EZZ',weight:25.2583333333},
+  {type:'ezz',amount:3000,label:'3,000 EZZ',weight:27.1833333334}
 ];
 function updateSpinUI(){
   const btn=$('spinBtn'), st=$('spinStatus'); if(!btn||!st) return;
@@ -370,7 +371,13 @@ function spinCP(){
   if(now-(s.lastSpinTs||0)<SPIN_COOLDOWN_MS){showToast('⏳ اسپین هنوز آماده نیست');updateSpinUI();return}
   s.lastSpinTs=now;
 
-  const prize=SPIN_PRIZES[Math.floor(Math.random()*SPIN_PRIZES.length)];
+  const totalWeight=SPIN_PRIZES.reduce((sum,p)=>sum+p.weight,0);
+  let roll=Math.random()*totalWeight;
+  let prize=SPIN_PRIZES[SPIN_PRIZES.length-1];
+  for(const p of SPIN_PRIZES){
+    roll-=p.weight;
+    if(roll<=0){prize=p;break;}
+  }
   if(prize.type==='cp'){
     s.cp=(s.cp||0)+prize.amount;
     showToast('🎉 برنده شدی! +'+prize.label);

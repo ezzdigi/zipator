@@ -130,7 +130,11 @@ button{font-family:inherit}
 </div>
 <header>
   <div class="brand"><div class="logo">EZ</div><div><b>EzzDigi Gaming</b><span>Gaming Mini App</span></div></div>
-  <button class="iconbtn" onclick="showToast('پروفایل آماده است 🎮')">⚙️</button>
+  <div style="display:flex;align-items:center;gap:6px">
+    <a href="https://ezzdigi.com" target="_blank" rel="noopener" aria-label="وب‌سایت EzzDigi" style="text-decoration:none">🌐</a>
+    <a href="https://instagram.com/ezzdigi" target="_blank" rel="noopener" aria-label="Instagram EzzDigi" style="text-decoration:none">📸</a>
+    <button class="iconbtn" onclick="showToast('پروفایل آماده است 🎮')">⚙️</button>
+  </div>
 </header>
 
 <div id="membershipBanner" style="display:none;margin:0 14px 10px;padding:10px 14px;border-radius:12px;background:#ff7a1818;border:1px solid #ff7a1840;color:#ffc184;font-size:11px;text-align:center;line-height:1.7"></div>
@@ -206,13 +210,13 @@ button{font-family:inherit}
     <h3 style="margin:5px 0 3px">اسپین CP</h3>
     <small style="color:var(--muted)">با برد اسپین، یکی از جایزه‌های زیر به موجودی شما اضافه می‌شود</small>
     <div style="display:flex;justify-content:center;gap:8px;margin:12px 0 6px;flex-wrap:wrap">
-      <span class="stat" style="padding:8px 14px">🪙 1 CP · ۰.۷٪</span>
-      <span class="stat" style="padding:8px 14px">🪙 2 CP · ۰.۱٪</span>
-      <span class="stat" style="padding:8px 14px">🪙 4 CP · ۰.۰۱٪</span>
+      <span class="stat" style="padding:8px 14px">🪙 1 CP</span>
+      <span class="stat" style="padding:8px 14px">🪙 2 CP</span>
+      <span class="stat" style="padding:8px 14px">🪙 4 CP</span>
     </div>
     <div style="display:flex;justify-content:center;gap:8px;margin:0 0 12px;flex-wrap:wrap">
-      <span class="stat" style="padding:8px 14px">⚡ انرژی کامل · ۳۰٪</span>
-      <span class="stat" style="padding:8px 14px">⭐ ۲۰ XP · ۱۰٪</span>
+      <span class="stat" style="padding:8px 14px">⚡ انرژی کامل</span>
+      <span class="stat" style="padding:8px 14px">⭐ ۲۰ XP</span>
       <span class="stat" style="padding:8px 14px">💰 ۱,۵۰۰ / ۲,۰۰۰ / ۳,۰۰۰ EZZ</span>
     </div>
     <button class="claim spin-main" id="spinBtn" onclick="spinCP()" style="width:100%;font-size:16px;padding:15px 12px;font-weight:900;letter-spacing:.2px">🎡 <span>چرخاندن اسپین</span> <b>✦</b></button>
@@ -239,7 +243,7 @@ button{font-family:inherit}
     <div class="card mission"><div class="micon">⭐</div><div class="grow"><b>XP و Level</b><small>XP با بازی و بعضی پاداش‌ها افزایش پیدا می‌کند. با پیشرفت XP، Level بازی نیز ارتقا پیدا می‌کند. مقدار XP و نوار پیشرفت را در پروفایل ببین.</small></div></div>
     <div class="card mission"><div class="micon">🚀</div><div class="grow"><b>Boost</b><small>در Boost Center می‌توانی Tap Power را ارتقا بدهی. هرچه Tap Power بیشتر باشد، هر لمس EZZ و XP بیشتری تولید می‌کند. بعضی Boostها ممکن است در نسخه‌های بعدی فعال شوند.</small></div></div>
     <div class="card mission"><div class="micon">🎯</div><div class="grow"><b>مأموریت‌ها</b><small>در صفحه بازی مأموریت‌های روزانه را انجام بده و EZZ بگیر. هر مأموریت پس از دریافت جایزه تا پایان زمان تعیین‌شده دوباره قابل دریافت نیست.</small></div></div>
-    <div class="card mission"><div class="micon">🎡</div><div class="grow"><b>اسپین روزانه</b><small>هر ۲۴ ساعت یک بار امکان اسپین داری. جوایز شامل ۱ CP با شانس ۰٫۷٪، ۲ CP با شانس ۰٫۱٪، ۴ CP با شانس ۰٫۰۱٪، انرژی کامل با شانس ۳۰٪، ۲۰ XP با شانس ۱۰٪ و جوایز ۱٬۵۰۰، ۲٬۰۰۰ و ۳٬۰۰۰ EZZ است. پس از اسپین، زمان اسپین بعدی نمایش داده می‌شود.</small></div></div>
+    <div class="card mission"><div class="micon">🎡</div><div class="grow"><b>اسپین روزانه</b><small>هر ۲۴ ساعت یک بار امکان اسپین داری. جوایز شامل ۱ CP، ۲ CP، ۴ CP، انرژی کامل، ۲۰ XP و جوایز ۱٬۵۰۰، ۲٬۰۰۰ و ۳٬۰۰۰ EZZ است. پس از اسپین، زمان اسپین بعدی نمایش داده می‌شود.</small></div></div>
     <div class="card mission"><div class="micon">🏆</div><div class="grow"><b>رتبه‌بندی</b><small>در بخش رتبه می‌توانی امتیاز، رتبه، Level و CP خودت را ببینی. جدول رتبه‌بندی برای مقایسه امتیاز بازیکنان استفاده می‌شود.</small></div></div>
     <div class="card mission"><div class="micon">🎁</div><div class="grow"><b>جوایز و ایونت</b><small>در بخش جوایز، اطلاعات جوایز ایونت Ezzgame و اسپین را ببین. رتبه و امتیاز ثبت‌شده در بازی برای رقابت ایونت استفاده می‌شود.</small></div></div>
     <div class="card mission"><div class="micon">👤</div><div class="grow"><b>پروفایل</b><small>پروفایل شامل اطلاعات کاربر، نام بازی، آیدی تلگرام، XP، Level، تعداد دعوت‌ها و پاداش دعوت است. در صورت نیاز می‌توانی شماره تماس را از طریق تلگرام ثبت کنی.</small></div></div>
